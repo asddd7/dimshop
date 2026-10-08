@@ -43,9 +43,19 @@ class AuthenticationTest extends TestCase
 
         $this->assertAuthenticatedAs($user);
 
+        $this->get('/')->assertOk()->assertSee('Selamat datang, '.$user->name);
+
         $this->post(route('logout'))->assertRedirect('/');
 
         $this->assertGuest();
+    }
+
+    public function test_failed_login_shows_validation_error(): void
+    {
+        $this->post(route('login.store'), [
+            'email' => 'missing@example.com',
+            'password' => 'wrong-password',
+        ])->assertSessionHasErrors('email');
     }
 
     public function test_guest_cannot_logout(): void

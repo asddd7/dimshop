@@ -6,7 +6,9 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
-    return view('auth.login');
+    return auth()->check()
+        ? view('dashboard')
+        : view('auth.login');
 });
 
 Route::middleware('guest')->group(function () {
